@@ -13,7 +13,8 @@ import java.util.List;
 @Repository
 public class ProviderRepositoryImpl implements ProviderRepository {
     private static final String SQL_GET_ORDERS = "SELECT * FROM orders WHERE status = 'IN_PROGRESS'";
-    private static final String SQL_CHANGE_STATUS = "Update orders SET status = ? WHERE id = ?";
+    private static final String SQL_DECLINE_ORDER = "Update orders SET status = 'DECLINE' WHERE id = ?";
+    private static final String SQL_SET_TRANSPORT = "Update orders SET status = 'DONE', transportId = ? WHERE id = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -28,11 +29,20 @@ public class ProviderRepositoryImpl implements ProviderRepository {
     }
 
     @Override
-    public void changeStatus(Integer orderId, String status) throws OrderException {
+    public void setTransport(Integer orderId, Integer transportId) throws OrderException {
         try {
-            jdbcTemplate.update(SQL_CHANGE_STATUS, status, orderId);
+            jdbcTemplate.update(SQL_SET_TRANSPORT, transportId, orderId);
         } catch (Exception e) {
-            throw new OrderException("Can't change order status");
+            throw new OrderException("Can't set transport");
+        }
+    }
+
+    @Override
+    public void declineOrder(Integer orderId) throws OrderException {
+        try {
+            jdbcTemplate.update(SQL_DECLINE_ORDER, orderId);
+        } catch (Exception e) {
+            throw new OrderException("Can't decline order");
         }
     }
 

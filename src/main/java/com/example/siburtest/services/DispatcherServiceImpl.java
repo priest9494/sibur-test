@@ -20,7 +20,7 @@ public class DispatcherServiceImpl implements DispatcherService{
 
     @Override
     public void changeStatus(Integer orderId, String status) throws OrderException {
-        if(status != "IN_PROGRESS" || status != "DECLINE")
+        if(!status.equals("IN_PROGRESS") && !status.equals("DECLINE"))
             throw new OrderException("Invalid status");
         dispatcherRepository.changeStatus(orderId, status);
     }

@@ -19,9 +19,12 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
-    public void changeStatus(Integer orderId, String status) throws OrderException {
-        if(status != "DONE" || status != "DECLINE")
-            throw new OrderException("Invalid status");
-        providerRepository.changeStatus(orderId, status);
+    public void setTransport(Integer orderId, Integer transportId) throws OrderException {
+        providerRepository.setTransport(orderId, transportId);
+    }
+
+    @Override
+    public void declineOrder(Integer orderId) throws OrderException {
+        providerRepository.declineOrder(orderId);
     }
 }
